@@ -1,0 +1,122 @@
+#############################################################################
+# MQ4CPP - Message queuing for C++
+# Copyright (C) 2004-2007  Riccardo Pompeo (Italy)
+#
+# This library is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public
+# License as published by the Free Software Foundation; either
+# version 2.1 of the License, or (at your option) any later version.
+#
+# This library is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public
+# License along with this library; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+#
+# Makefile for Win32
+#
+
+!include <win32.mak>
+
+# Set before in your DOS environment the following variables:
+# INCLUDE="%ProgramFiles%\Microsoft Platform SDK\Include";"%ProgramFiles%\Microsoft Visual Studio 8\VC\include";
+# for x86  LIB="%ProgramFiles%\Microsoft Platform SDK\Lib";"%ProgramFiles%\Microsoft Visual Studio 8\VC\lib";
+# for IA64 LIB="%ProgramFiles%\Microsoft Platform SDK\Lib\IA64";
+# for x86  PATH=....;"%ProgramFiles%\Microsoft Platform SDK\Bin";"%ProgramFiles%\Microsoft Visual Studio 8\VC\bin";
+# for IA64 PATH=....;"%ProgramFiles%\Microsoft Platform SDK\Bin\win64";
+
+CFLAGS	= $(cflags) -EHa -MT -DNDEBUG 
+#CFLAGS	= $(cflags) -EHa -Zi -MT
+LFLAGS = $(lflags) -LIBPATH:. 
+#LFLAGS = $(lflags) -LIBPATH:. -DEBUG 
+LIBS = WS2_32.Lib IPHlpApi.Lib
+
+SRCS = Router.cpp Compression.cpp GeneralHashFunctions.cpp Properties.cpp MemoryChannel.cpp FileTransfer.cpp StoreForward.cpp FileSystem.cpp Trace.cpp Encription.cpp Session.cpp RequestReply.cpp Registry.cpp Vector.cpp MessageProxy.cpp socket.cpp Timer.cpp LinkedList.cpp Thread.cpp MessageQueue.cpp Logger.cpp LockManager.cpp
+CSRC = rijndael-128.c rijndael-256.c
+OBJS   = $(SRCS:.cpp=.obj) $(CSRC:.c=.obj)
+EX	   = .\examples
+EXSRCS = $(EX)\example14.cpp $(EX)\compr.cpp $(EX)\benchmark.cpp $(EX)\peer.cpp $(EX)\example1.cpp $(EX)\example2.cpp $(EX)\example3.cpp $(EX)\example4.cpp $(EX)\example5.cpp $(EX)\example6.cpp $(EX)\example7.cpp $(EX)\example8.cpp $(EX)\example9.cpp $(EX)\example10.cpp $(EX)\example11.cpp $(EX)\mqftp.cpp $(EX)\example12.cpp $(EX)\example13.cpp
+EXOBJS = $(EXSRCS:.cpp=.obj)
+EXES   = $(EXSRCS:.cpp=.exe)
+AR	   = lib
+RM	   = del /f /s
+RMDIR  = rmdir /S /Q
+MQ4CPP = mq4cpp.lib
+
+all: $(EXES)
+
+$(EXES): $(MQ4CPP) $(EXOBJS) 
+	$(link) $(LFLAGS) /out:$@ $(@:.exe=.obj) $(MQ4CPP) $(LIBS)
+
+$(MQ4CPP): $(OBJS)
+	$(RM) $@
+	$(AR) /out:$@ $(OBJS)
+
+$(EXES): $(EXOBJS) $(OBJS)
+
+.c.obj:
+	$(CC) $(CFLAGS) -I . -Fo$@ $*.c
+
+.cpp.obj:
+	$(CC) $(CFLAGS) -I . -Fo$@ $*.cpp
+
+example1.obj: $(EX)\example1.cpp Registry.h Thread.h Vector.h LinkedList.h Timer.h Logger.h Properties.h MessageQueue.h E
+example2.obj: $(EX)\example2.cpp Registry.h Thread.h Vector.h LinkedList.h Timer.h Logger.h Properties.h MessageQueue.h
+example3.obj: $(EX)\example3.cpp Registry.h Thread.h Vector.h LinkedList.h Timer.h Properties.h MessageQueue.h Logger.h
+example4.obj: $(EX)\example4.cpp Registry.h Thread.h Vector.h LinkedList.h Timer.h Properties.h MessageQueue.h Logger.h
+example5.obj: $(EX)\example5.cpp Registry.h Thread.h Vector.h LinkedList.h Timer.h Properties.h MessageProxy.h Socket.h Logger.h MessageQueue.h Compression.h Encription.h
+example6.obj: $(EX)\example6.cpp Registry.h Thread.h Vector.h LinkedList.h Timer.h Properties.h MessageProxy.h Socket.h Logger.h MessageQueue.h Compression.h Encription.h
+example7.obj: $(EX)\example7.cpp Registry.h Thread.h Vector.h LinkedList.h Timer.h Properties.h MessageProxy.h Socket.h Logger.h MessageQueue.h RequestReply.h Compression.h Encription.h
+example8.obj: $(EX)\example8.cpp Registry.h Thread.h Vector.h LinkedList.h Timer.h Properties.h MessageProxy.h Socket.h Logger.h MessageQueue.h RequestReply.h Session.h Compression.h Encription.h
+example9.obj: $(EX)\example9.cpp Registry.h Thread.h Vector.h LinkedList.h Timer.h Properties.h MessageProxy.h Socket.h Logger.h MessageQueue.h Compression.h Encription.h
+example10.obj: $(EX)\example10.cpp Registry.h Thread.h Vector.h LinkedList.h Timer.h Properties.h MessageProxy.h Socket.h Logger.h MessageQueue.h RequestReply.h Session.h StoreForward.h FileSystem.h Compression.h Encription.h
+example11.obj: $(EX)\example11.cpp Registry.h Thread.h Vector.h LinkedList.h Timer.h Properties.h MessageProxy.h Socket.h Logger.h MessageQueue.h RequestReply.h Compression.h Encription.h
+example12.obj: $(EX)\example12.cpp Registry.h Thread.h Vector.h LinkedList.h Timer.h Properties.h MessageProxy.h Socket.h Logger.h MessageQueue.h RequestReply.h MemoryChannel.h Compression.h Encription.h
+example13.obj: $(EX)\example13.cpp Registry.h Thread.h Vector.h LinkedList.h Timer.h Properties.h MessageProxy.h Socket.h Logger.h MessageQueue.h RequestReply.h LockManager.h Compression.h Encription.h
+example14.obj: $(EX)\example14.cpp Registry.h Thread.h Vector.h LinkedList.h Timer.h Properties.h MessageProxy.h Socket.h Logger.h MessageQueue.h RequestReply.h Router.h
+mqftp.obj: mqftp.cpp Registry.h Thread.h Vector.h LinkedList.h Timer.h Properties.h MessageProxy.h Socket.h Logger.h MessageQueue.h RequestReply.h FileTransfer.h Compression.h Encription.h
+peer.obj: peer.cpp Registry.h Thread.h Vector.h LinkedList.h Timer.h Properties.h MessageProxy.h Socket.h Logger.h MessageQueue.h RequestReply.h FileTransfer.h Compression.h Encription.h
+benchmark.obj: benchmark.cpp Registry.h Thread.h Vector.h LinkedList.h Timer.h Properties.h MessageProxy.h Socket.h Logger.h MessageQueue.h RequestReply.h LockManager.h Compression.h Encription.h Router.h
+compr.obj: compr.cpp Registry.h Thread.h Vector.h LinkedList.h Timer.h Properties.h MessageProxy.h Socket.h Logger.h MessageQueue.h RequestReply.h LockManager.h Compression.h Encription.h
+
+Router.obj: Router.cpp Router.h Thread.h MessageQueue.h Vector.h LinkedList.h Logger.h
+LockManager.obj: LockManager.cpp LockManager.h RequestReply.h Registry.h Thread.h Properties.h MessageQueue.h MessageProxy.h Vector.h LinkedList.h Logger.h Timer.h Socket.h Compression.h Encription.h
+MemoryChannel.obj: MemoryChannel.cpp MemoryChannel.h RequestReply.h Registry.h Thread.h Properties.h MessageQueue.h MessageProxy.h Vector.h LinkedList.h Logger.h Timer.h Socket.h Compression.h Encription.h
+FileTransfer.obj: FileTransfer.cpp FileTransfer.h FileSystem.h RequestReply.h Registry.h Thread.h Properties.h MessageQueue.h MessageProxy.h Vector.h LinkedList.h Logger.h Timer.h GeneralHashFunctions.h Socket.h Compression.h Encription.h
+StoreForward.obj: StoreForward.cpp StoreForward.h FileSystem.h Session.h RequestReply.h Registry.h Thread.h Properties.h MessageQueue.h MessageProxy.h Vector.h LinkedList.h Logger.h Timer.h Socket.h
+Session.obj: Session.cpp Session.h RequestReply.h Registry.h Thread.h Properties.h MessageQueue.h MessageProxy.h Vector.h LinkedList.h Logger.h Timer.h Socket.h Compression.h Encription.h
+RequestReply.obj: RequestReply.cpp RequestReply.h Registry.h Thread.h Properties.h MessageQueue.h MessageProxy.h Vector.h LinkedList.h Logger.h Timer.h Socket.h Compression.h Encription.h
+MessageProxy.obj: MessageProxy.cpp MessageProxy.h GarbageCollector.h Thread.h Properties.h MessageQueue.h Vector.h LinkedList.h Socket.h Compression.h Encription.h rijndael.h GeneralHashFunctions.h 
+
+Registry.obj: Registry.cpp Registry.h MessageQueue.h Thread.h LinkedList.h Vector.h
+MessageQueue.obj: MessageQueue.cpp Registry.h Thread.h MessageQueue.h LinkedList.h Logger.h
+Logger.obj: Logger.cpp Logger.h Thread.h MessageQueue.h LinkedList.h
+Timer.obj: Timer.cpp Timer.h Logger.h Thread.h LinkedList.h
+Properties.obj: Properties.cpp Properties.h
+FileSystem.obj: FileSystem.cpp FileSystem.h
+Socket.obj: Socket.cpp Socket.h
+Vector.obj: Vector.cpp Vector.h
+LinkedList.obj: LinkedList.cpp LinkedList.h
+Thread.obj: Thread.cpp Thread.h
+Encription.obj: Encription.cpp Encription.h rijndael.h
+Compression.obj: Compression.cpp Compression.h MergeSort.h Logger.h
+
+rijndael-128.obj: rijndael-128.c rijndael.h
+rijndael-256.obj: rijndael-256.c rijndael.h
+GeneralHashFunctions.obj: GeneralHashFunctions.cpp GeneralHashFunctions.h 
+
+clean:
+	$(RM) *.obj
+	$(RM) *.pdb
+	$(RM) *.ilk
+	$(RM) *.ncb
+	$(RM) *.exp
+	$(RM) *.exe
+	$(RM) *.dll
+	$(RM) *.lib
+	$(RM) *.log
+
+	

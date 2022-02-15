@@ -1,0 +1,220 @@
+================ MQ4CPP =======================
+Project: Message Queuing for C++
+Copyright (C) 2004-2007  Riccardo Pompeo (Italy)
+http://www.sixtyfourbit.org
+mailto:riccardo.pompeo@sixtyfourbit.org
+===============================================
+
+DESCRIPTION
+===========
+MQ4CPP, or "Message Queuing for C++",  is an open source implementation of enterprise messaging system, also referred to as 
+message-oriented middleware (MOM).
+
+MQ4CPP enables C++ application threads to communicate with other threads locally or remotely through the exchange of messages.
+
+A message is a request, report, and/or event that contains information needed to coordinate communication 
+between different applications. A message provides a level of abstraction, allowing you to separate the 
+details about the destination system from the application code.
+
+Specifically, MQ4CCP:
+- enables C++ applications sharing a messaging system to exchange messages 
+- simplifies application development by providing a standard interface for creating, sending, and receiving messages.
+
+MQ4CPP implements the following messaging paradigms:
+- Direct/Indirect messaging
+- Unsolicited messaging
+- Request/Reply
+	- Reliable messaging
+	- Automatic reconnection
+	- Connection failover on multiple servers
+- Conversation
+- Broadcast
+- Publish/Subscribe
+- Store&Forward
+- Message routing
+	- Local routing
+	- Remote routing
+	- Topic driven switching
+
+MQ4CPP implements also the following services:
+- Advanced tracing for multi-threading debugging:
+	- Send debug messages to stdout
+	- Send debug messages to Microsoft WinDbg 
+- Thread safe garbage collector.
+- Performant implementation of LinkedList and Vector patterns.
+- Timer (single shot, self-repeating).
+- Thread safe logger.
+- Deferred queuing to avoid thread locks or infinite looping.
+- Lookup service:
+	- Local services
+	- Remote services
+- Local and remote threads referenced by handle.
+- Automatic clean-up of network connections.
+- Threads reuse same socket connections.
+- Socket transmission:
+	- TCP protocol
+	- statistical multiplexing on a single connection
+	- packets limited to 65 Kbytes to avoid hacking via buffer overflow attacks.
+	- packets associated to a sequence number.
+- Session management:
+	- session repository
+	- session replication between multiple server
+- Message encription:
+	- Rijndael 128
+	- Rijndael 256
+	- Ready for more
+- Message compression
+
+As implementation of Request/Reply MQ4CPP include also:
+- Distributed lock manager to allow multiple threads share any resources
+- File transfer to transfer file between threads 
+- Distributed memory channel to transfer big amount of memory (for example a cache) between threads.
+
+In './docs' directory are included the following resources:
+- 'class_diagram_*.png': UML class diagrams
+- 'mq4cpp.pdf': Description of implemented paradigms, main class diagrams and interaction diagrams of included examples
+
+In './examples' directory are included some example programs, one for each implemented paradigm. 
+
+I suggest you to read before 'mq4cpp.pdf' and than customize an example program to start your application integration project using MQ4CPP framework.   
+ 
+COPYRIGHT
+=========
+This library is free software; you can redistribute it and/or
+modify it under the terms of the GNU Lesser General Public
+License as published by the Free Software Foundation; either
+version 2.1 of the License, or (at your option) any later version.
+This library is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+Lesser General Public License for more details.
+
+DISCLAIMER
+==========
+No warranty or responsibility in relation to the suitability, functionality, 
+reliability or robustness of the software. This software is under constant revision, 
+with changes likely to some parts of API. All reasonable efforts are made to supply 
+the software without known defects or exploits, however no responsibility can be 
+accepted by the authors.
+
+SUPPORTED PLATFORM
+==================
+MQ4CPP is compiled and tested on the following platforms:
+- Windows 2000 (x86)
+- Windows XP SP1 (x86)
+- Windows 2003 Enterprise Server SP1 (SMP Itanium2)
+- Linux Red Hat ES 3.0 (x86 - kernel 2.4.21)
+- Linux SuSE SLES 8 (SMP Itanium2 - kernel 2.4.21) 
+- Linux Red Hat ES 3.0 (SMP Itanium2 - kernel 2.4.21) 
+- Linux Red Hat EL 4.0 update 2 (SMP Itanium2 - kernel 2.6.9-22)
+- Linux OpenSuSE 10.1 (x86 - kernel 2.6.16.13)
+
+Send support request to: freshmeat@sixtyfourbit.org
+Find latest release at: http://www.sixtyfourbit.org/mq4cpp.htm
+
+COMPILE ON WINDOWS
+==================
+Download and install Microsoft Visual C++ Express Edition 2005 at: 
+http://msdn.microsoft.com/vstudio/express/visualc/download/ 
+Download and install Microsoft Platform SDK (Core SDK only) at: 
+http://www.microsoft.com/downloads/details.aspx?FamilyId=A55B6B43-E24F-4EA3-A93E-40C0EC4F68E5&displaylang=en
+
+Set in your DOS environment the following variables:
+INCLUDE="%ProgramFiles%\Microsoft Platform SDK\Include";"%ProgramFiles%\Microsoft Visual Studio 8\VC\include";
+
+For x86 set:
+LIB="%ProgramFiles%\Microsoft Platform SDK\Lib";"%ProgramFiles%\Microsoft Visual Studio 8\VC\lib";
+PATH=....;"%ProgramFiles%\Microsoft Platform SDK\Bin";"%ProgramFiles%\Microsoft Visual Studio 8\VC\bin";
+
+For IA64  set:
+LIB="%ProgramFiles%\Microsoft Platform SDK\Lib\IA64";
+PATH=....;"%ProgramFiles%\Microsoft Platform SDK\Bin\win64";
+
+Copy 'mspdb80.dll' from "%ProgramFiles%\Microsoft Visual Studio 8\Common7\IDE" to "%ProgramFiles%\Microsoft Visual Studio 8\VC\bin".
+
+Run: nmake /f Makefile.win
+
+DEBUG ON WINDOWS
+================
+Install Dubugging Tools from Microsoft Platform SDK menu.
+
+Set in your DOS environment the following variable:
+PATH=....;"%ProgramFiles%\Debugging Tools for Windows";
+
+Run: windbg exampleXX.exe [param...]
+Then: g
+
+COMPILE ON LINUX
+================
+Run: ./configure
+Run: make
+As super-user: make install
+
+DEBUG ON LINUX
+==============
+Run: libtool gdb ./examples/exampleXX
+Then: run [param...]
+
+RUN EXAMPLES
+============
+## Local messaging exchange examples (1-4) ###
+Run client: example(1-4)
+
+## Unsolicited messaging example ###
+Run server: example5
+Run client: example5 [host]
+
+## Network conversation example ###
+Run server: example6 
+Run client: example6 [host]
+
+## Reliable request/reply with failover example ###
+Run default server: example7 -s [port1]
+Run failover server: example7 -s [port2]
+Run client: example7 -c host1 port1 [host2] [port2]
+Try to stop default server using CTRL-C. Comunication will switch on failover server.
+Restart default server and stop failover server using CTRL-C. Comunication will switch on default server.
+
+## Reliable request/reply with failover and session replication example ###
+Run default server: example8 -s [port1] [host2] [port2]
+Run failover server: example8 -s [port2] [host1] [port1]
+Run client: example8 -c host1 port1 [host2] [port2]
+Try to stop default server using CTRL-C. Comunication will switch on failover server. Session state is safe.
+Restart default server and stop failover server using CTRL-C. Comunication will switch on default server. Session state is safe.
+
+## Publish/Subscribe messaging example ###
+Run server: example9
+Run client: example9 host
+
+## Store&Forward with failover and session replication example ###
+Run server: example10 -s port
+Run client: example10 -c host port
+
+## Send structured messages example ###
+Run server: example11 -s port
+Run client: example11 -c host port
+
+## Memory channel example ##
+Run server: example12 -s port
+Run client: example12 -c host port
+
+## Lock manager example ##
+Run server: example13 -s port
+Run client: example13 -c host port
+
+## Routing example ##
+Run: example14
+
+## File transfer example ##
+Run server: mqftp -s port dest_path
+Run client: mqftp -c host port file_name
+
+## MQ4CPP benchmark application ##
+Run client: benchmark -c hostip port
+Run router: benchmark -r port hostip port
+Run server: benchmark -s port
+Run server with local router: benchmark -l port
+
+## Compression/Decompression benchmark application ##
+Run: compr
+

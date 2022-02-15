@@ -1,0 +1,146 @@
+============================
+==== MQ4CPP CHANGE LOG =====
+============================
+
+Release V1.16
+=============
+MessageProxy.h,Socket.h,Thread.h,rijndael.h,FileSystem.cpp,Socket.cpp,Thread.cpp modified for compatibility with FreeBSD.
+
+
+Release V1.15
+=============
+Trace.cpp - Fixed high amount of system cpu usage in Linux
+mqftp.cpp -  Added destination path option
+FileTransfer.h/.cpp - Added the possibility to specify the destination path for a file transfer.
+example14.cpp - Added new example to demostrate how to route Request/Reply messages.
+RequestReply.h/.cpp - New constructor for Client to narrow local services, added Client::setTopic to handle remote switching, fixed a bug in Server::onRequest().
+Router.h/.cpp - New classes Switch and Localhost router.
+Registry.cpp - Fixed a little bug on Rgistry::add member. Now stopped threads are logged. 
+MessageQueue.h/cpp - Added new Decoupler::deferredBroadcast member and new MessageQueue::shutdown to gracefully shutdown a message queue.
+MessageProxy.h/cpp - Added new MessageProxyFactory::getUniqueNetID static member.
+Socket.h/cpp - Added new getAdapters static member. Now SocketServer accept listen address in the constructor.
+Thread.h/cpp - Added new setAffinity member to set thread cpu affinity and modified stop member function.
+FileSystem.h/cpp - Added new static member find, copy, move, rmdir and mkfulldir to Directory class. Modified copy member function.
+
+Release V1.14
+=============
+benchmark.cpp - Added message routing and parallel mode execution of test 
+Router.h/.cpp - New classes RemoteRouting and LocalRouting
+
+Release V1.13
+=============
+benchmark.cpp - New application added to evaluate MQ4CPP performances
+RequestReply.cpp - Fixed deallocation problem of tx message after Client::success or Client::fail member call.
+MessageProxy.h/.cpp - Handling compression/decompression in Observer. Fixed performance problem during TCP/IP tx.
+compr.cpp - New application added to bench compression performance  
+Copression.h/.ccp - New class PacketCompression
+
+Release V1.12
+=============
+MessageProxy.h/.cpp - Added onNewConnection virtual member in MessageProxyFactory class
+peer.cpp - New example to demostrate how to build a peer to peer service.
+
+Release V1.11
+=============
+Encription.h/.cpp - Added generateKey128 and generateKey256 from a string
+MessageProxy.h/.cpp - Changed MessageProxy rx and tx
+FileTransfer.h/.cpp - Changed transfer size to 65Kbytes
+Socket.cpp - Fixed bug on socket receive function
+Logger.h/.cpp - Added new macro BUFFER to dump a buffer in the log file
+Properties.h/.cpp - Changed size of LongIntProperty from long to long long to avoid problems between IA32 and IA64
+
+Release V1.10
+=============
+Registry.h/.cpp - Fixed bug in lookup().
+MessageQueue.h/.cpp - Added static member function dump().
+Registry.h/.cpp - New dump() member fuction for Registry class to show all instanced MessageQueue objects. 
+MessageProxy.cpp - New decodeProperties overladed member function for Observer class.
+Properties.h./cpp - Added getRecordset to ListProperty to retrieve all its ListProperty objects.  
+MemoryChannel.h/.cpp - Added an overloaded member function in MemoryChannelClient to set memory buffer 
+Request.h/.cpp - Added member function in Client class to test connection parameters
+MessageQueue.h/.cpp - Added new lookup function. Observer has a new member value itsLastMessageProxy containing last MessageProxy handle.
+Registry.h/.cpp - Added new lookup function
+MessageProxy.cpp - MessageProxyFactory now create MessageProxy with connection properties embedded in its name. 
+Socket.h/.cpp - Changes on SocketServer allow to retrieve address and port of connection.
+
+Release V1.9
+============
+example13.cpp - New example to demostrate how lock manager works.
+LockManager.h/.cpp - LockManager class added
+example12.cpp - New example to demostrate how memory channel works.
+MemoryChannel.h/.cpp - MemoryChannel class added
+mqft.cpp - New example to demostrate how file transfer works.
+FileTransfer.h/.cpp - FileTransfer class added 
+MessageProxy.h/.cpp - Added to Observer class encodeProperties/decodeProperties member funcitions
+Properties.h/.cpp - Created new modules for Property classes and implementation
+Session.h/.cpp - Removed Propety classes definition and implementation
+FileSystem.h/.cpp - On File::open() check file size. getSize() return the file size value.  
+makefile - example*.cpp moved to ./examples directory
+
+Release V1.8
+============
+Tread.h/.cpp - Redesigned multithreading sincronization for WIN32 
+LinkedList.h/.cpp - Redesigned LinkedList with SMP cache coecency WIN32 APIs
+Vector.cpp - Redesigned Vector with SMP cache coecency WIN32 APIs
+Makefile.win - Added -MT to link C multithreaded run-time library (LIBCMT.LIB)
+example3.cpp - Added more concurrent thead
+
+Release V1.7
+============
+From this version MQ4CPP is modified to support True3DShell project
+Timer.cpp - Timer tick lowed from 100ms to 10ms
+FileSystem.h/cpp - Improved file system interface
+
+Release V1.6
+============
+StoreForward.h/.cpp - Added MessageStorer and MessageForwarder classes to implement store&forward
+FileSystem.h/.cpp - Added utility classes to interface file system.
+
+Release V1.5
+============
+Exception.h - Added main exception class
+Logger.h/cpp - Added STARTLOGGER  
+Thread.cpp - Fixed thread dead lock on Windows. 
+Timer.h/.cpp - Timer send copies of Wakeup message.
+Session.h/cpp - A session can be stored or loaded from a file.
+MessageProxy.h/cpp - Implementation of publish/subscribe paradigm.
+Registry.h/cpp - Handle generation don't use a zero value.   
+Registry.h/cpp - Broadcasting messages not posted to queue has invoked broadcast.
+MessageQueue.h/cpp - sender handle (getSender/setSender) moved from network messages to Message class.
+MessageQueue.h/cpp - Added clone() and removed possibility for a message to be statically allocated. 
+
+Release V1.4
+============
+example1-4.cpp - Fixed bug of memory leaking.
+trace.h/cpp - Trace is now integrated with Microsoft DDK WinDbg debugger.
+Registry.h/.cpp - Fixed bug of multithreading conflict.
+RequestReply.h/.cpp - Fixed bug of multithreading conflict. Fixed bug while lookingup a service from Client. 
+Session.h/.cpp - Changed ListProperty deserialization.
+
+Release V1.3
+============
+example6.cpp - Modified to use Rijndael 256 encription.
+example5.cpp - Modified to use Rijndael 128 encription.
+MessageProxy.h/.cpp - Modified class Observer to support encription/decription for network messages.
+Session.h/.cpp - ListProperty is now itself a Property. This enables to store a tree of properties in a session.
+Session.h/.cpp - Fixed bug of multithread contention on properties management.
+Encription.h/.cpp - Added OO wrapper for encription.
+rijndael.h/rijndael-128.c/rijndael-256.c - Added Rijndael 128/256 ecription algorith.
+
+Release V1.2
+============
+example8.cpp - New example to demostrate how session repository and session replication work.
+Session.h/.cpp - Added PropertyList, Session and StatefulServer classes to support session repository and session replication.
+RequestReply.h/.cpp - Added timeout on lookup or sending messages.
+
+Release V1.1
+============
+GarbageCollector.h - Added flush() member.
+Registry.h/.cpp - Correct bug in handle assignment.
+MessageProxy.h/.cpp - Support of sequence number of message
+Timer.h/.cpp - Added time() static member. 
+RequestReply.h/.cpp - Added new Client and Server classes to support reliable Request/Reply messaging.
+
+Relese V1.0
+===========
+First release.
